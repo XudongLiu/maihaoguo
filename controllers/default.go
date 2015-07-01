@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"github.com/astaxie/beego"
+	"github.com/chanxuehong/wechat/util"
 )
 
 type MainController struct {
@@ -9,7 +10,17 @@ type MainController struct {
 }
 
 func (c *MainController) Get() {
-	c.Data["Website"] = "beego.me"
-	c.Data["Email"] = "astaxie@gmail.com"
-	c.TplNames = "index.tpl"
+
+	log.SetLogger("console", "")
+	signature := util.Sign(c.GetString("token"), c.GetString("timestamp"), c.GetString("nonce"))
+
+	if signature == c.GetString("signature") {
+
+		c.Ctx.WriteString(c.GetString("echostr"))
+		log.Info(signature)
+
+	} else {
+
+	}
+
 }
