@@ -3,11 +3,10 @@ package main
 import (
 	"github.com/astaxie/beego"
 	//	"github.com/astaxie/beego/logs"
-	"fmt"
-	_ "maihaoguo/routers"
-
 	"github.com/chanxuehong/wechat/mp"
 	"github.com/chanxuehong/wechat/mp/menu"
+	_ "maihaoguo/routers"
+	. "maihaoguo/util"
 )
 
 var AccessTokenServer = mp.NewDefaultAccessTokenServer("wx8657df9e66c8277d", "2b94ba328f84216c4eb2bfa0a6cbce82", nil) // 一個應用只能有一個實例
@@ -28,9 +27,9 @@ func main() {
 
 	clt := menu.Client{Client: mpClient}
 	if err := clt.CreateMenu(mn); err != nil {
-		fmt.Println(err)
+		Log.Info(err.Error())
 		return
 	}
-	fmt.Println("ok")
-	//	log := logs.NewLogger(10000)
+	Log.Info("xxxxx")
+
 }
