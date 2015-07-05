@@ -10,7 +10,7 @@ import (
 	"github.com/chanxuehong/wechat/mp/message/response"
 
 	"net/http"
-	"net/url"
+	// "net/url"
 
 	. "maihaoguo/util"
 )
@@ -56,20 +56,24 @@ func (c *MainController) Post() {
 	messageServeMux := mp.NewMessageServeMux()
 	messageServeMux.MessageHandleFunc(request.MsgTypeText, TextMessageHandler)
 
+	invalidRequesthandler := mp.InvalidRequestHandlerFunc(ErrorHandler)
+
 	// 下面函数的几个参数设置成你自己的参数: oriId, token, appId
 	mpServer := mp.NewDefaultServer("gh_d1ccedd04e4b", "maihaoguo", "wx8657df9e66c8277d", aesKey, messageServeMux)
-	//mpServerFrontend := mp.NewServerFrontend(mpServer, mp.ErrorHandlerFunc(ErrorHandler), nil)
+	mpServerFrontend := mp.NewServerFrontend(mpServer, invalidRequesthandler, nil)
 
-	queryValues, err := url.ParseQuery(c.Ctx.Request.URL.RawQuery)
-	if err != nil {
-		Log.Info("错误暂不处理")
-		//frontend.invalidRequestHandler.ServeInvalidRequest(w, r, err)
-		return
-	}
-
-	// if interceptor := frontend.interceptor; interceptor != nil && !interceptor.Intercept(w, r, queryValues) {
+	// queryValues, err := url.ParseQuery(c.Ctx.Request.URL.RawQuery)
+	// if err != nil {
+	// 	Log.Info("错误暂不处理")
+	// 	//frontend.invalidRequestHandler.ServeInvalidRequest(w, r, err)
 	// 	return
 	// }
 
-	mp.ServeHTTP(c.Ctx.ResponseWriter, c.Ctx.Request, queryValues, mpServer, nil)
+	// // if interceptor := frontend.interceptor; interceptor != nil && !interceptor.Intercept(w, r, queryValues) {
+	// // 	return
+	// // }
+
+	// mp.ServeHTTP(c.Ctx.ResponseWriter, c.Ctx.Request, queryValues, mpServer, nil)
+
+	mpServerFrontend.ServeHTTP(c.Ctx.ResponseWriter, c.Ctx.Request)
 }
