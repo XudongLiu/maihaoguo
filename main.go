@@ -30,6 +30,6 @@ func main() {
 		Log.Info(err.Error())
 		return
 	}
-	Log.Info("xxxxx")
+	Log.Info("菜单创建完成")
 
 }
